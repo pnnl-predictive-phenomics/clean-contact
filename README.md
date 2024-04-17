@@ -11,7 +11,7 @@ Follow https://pytorch.org/ to install PyTorch and torchvision with CUDA.
 
 ```bash
 git clone https://github.com/PNNL-CompBio/CLEAN-Contact.git
-cd CLEAN-contact-for-public
+cd CLEAN-contact
 conda create -n clean-contact python=3.10 -y
 conda activate clean-contact
 conda install -c conda-forge biopython biotite matplotlib numpy pandas pyyaml scikit-learn scipy tensorboardx tqdm
