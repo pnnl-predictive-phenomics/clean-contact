@@ -36,14 +36,16 @@ fair-esm == 2.0.0, pytorch-cuda == 12.1
 ### Setup
 1. Create required folders:
 
-    ```
-   python
-   >>> from src.CLEAN.utils import ensure_dirs
-   >>> ensure_dirs()
-    ```
-2. Download the precomputed embeddings and distance map for both training and test data from 
-[here](https://drive.google.com/drive/folders/1yw0P8kjiqCUPyYAZdI-GIpSGEnSOScVZ?usp=sharing) and put both `esm_data` 
-and `distance_map` folders under the `data` folder.
+```bash
+git clone https://github.com/PNNL-CompBio/CLEAN-Contact.git
+cd CLEAN-contact
+conda create -n clean-contact python=3.10 -y
+conda activate clean-contact
+conda install -c conda-forge biopython biotite matplotlib numpy pandas pyyaml scikit-learn scipy tensorboardx tqdm
+python -m pip install fair-esm==2.0.0
+python build.py install
+git clone https://github.com/facebookresearch/esm.git
+```
 
 
 ## Pre-inference
