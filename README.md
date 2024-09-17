@@ -1,5 +1,9 @@
 # CLEAN-Contact
 
+***This branch is for website development only***
+
+***The code for website is under clean-contact-website-backend. Please check out the README under clean-contact-website-backend. Thank you***
+
 This repository contains the code and data for the paper "CLEAN-Contact: Contrastive Learning-enabled Enzyme Functional Annotation Prediction with Structural Inference".
 
 ## Introduction

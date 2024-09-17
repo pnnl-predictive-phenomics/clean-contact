@@ -1,0 +1,45 @@
+<h2>CLEAN-Contact: Enzyme Commision (EC) Number Prediction Website</h2>
+<h4>Please carefully read <cite>Instructions</cite> before proceed.</h4>
+<p><b><cite>Instructions: </cite></b>Just input amino acid sequence and the corresponding UniProt ID to the fields, and leave your email to receive results once the calculation is done. You may leave this webpage after clicking the "Predict" button. If you do not receive any email after 24 hours after clicking "Prediction", please check your <b><cite>spam folder</cite></b>  or contact the first author. </p>
+<form action="" method="post">
+    {% csrf_token %}
+    <p>Please select your protein structure source:</p>
+    <input type="radio" id="uniprot" name="pdbsource" value="UniProt" checked onclick="javascript:checkPDB()">
+    <label for="uniprot">AlphaFold2 Protein Structure Database</label>
+    <input type="radio" id="custom" name="pdbsource" value="Upload" onclick="javascript:checkPDB()">
+    <label for="custom">Upload your own PDB</label><br><br>
+
+    <p>If you choose <b>AlphaFold2 Protein Structure Database</b> for protein structure source, enter the corresponding protein's <b>UniProt ID</b> in the following field, any uploaded file will be ignored. If you choose <b>Upload your own PDB</b>, put the protein structure in the <b>PDB</b> format in the <b>PDB Structure</b> field, <b>UniProt ID</b> field will be just used as a reference to your prediction result. </p>
+
+    <label for="uid">Uniprot/Submission ID:</label>
+    <input type="text" id="uid" name="uid" class="form-control"><br><br>
+
+    <div id="pdb_container" style="display: none;">
+        <label for="pdb">PDB Structure:</label><br>
+        <textarea id="pdb" name="pdb" class="form-control" rows="15" cols="50"></textarea><br><br>
+    </div>
+
+    <!-- <label for="stru">PDB Structure</label>
+    <input type="text" id="stru" name="stru" class="form-control"> -->
+    <label for="email">Email:</label>
+    <input type="email" id="email" name="email" class="form-control" size="20"><br><br>
+    <button type="submit" class="btn btn-primary">Predict</button><br>
+    
+</form>
+<!-- <br> -->
+<p>You are welcomed to leave any feedback about this tool and website by clicking <a href="mailto:yangy9@ccf.org?Subject=CLEAN-Contact Feedback">here</a>. </p>
+<!-- <br> -->
+<p>If you find this tool useful in your research, please cite:</p>
+<a href="https://www.biorxiv.org/content/10.1101/2024.05.14.594148.abstract">Yang, Y., Jerger, A., Feng, S., Wang, Z., Cheung, M. S., Zucker, J., & Guan, Q. (2024). CLEAN-Contact: Contrastive Learning-enabled Enzyme Functional Annotation Prediction with Structural Inference. bioRxiv, 2024-05. (Under revision at Communications Biology)</a>
+
+<script type="text/javascript">
+    function checkPDB() {
+        if (document.getElementById('custom').checked) {
+            document.getElementById('pdb_container').style.display = 'block';
+        } else {
+            document.getElementById('pdb_container').style.display = 'none';
+
+        }
+    }
+</script>
+
