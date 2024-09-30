@@ -1,45 +1,181 @@
-<h2>CLEAN-Contact: Enzyme Commision (EC) Number Prediction Website</h2>
-<h4>Please carefully read <cite>Instructions</cite> before proceed.</h4>
-<p><b><cite>Instructions: </cite></b>Just input amino acid sequence and the corresponding UniProt ID to the fields, and leave your email to receive results once the calculation is done. You may leave this webpage after clicking the "Predict" button. If you do not receive any email after 24 hours after clicking "Prediction", please check your <b><cite>spam folder</cite></b>  or contact the first author. </p>
-<form action="" method="post">
-    {% csrf_token %}
-    <p>Please select your protein structure source:</p>
-    <input type="radio" id="uniprot" name="pdbsource" value="UniProt" checked onclick="javascript:checkPDB()">
-    <label for="uniprot">AlphaFold2 Protein Structure Database</label>
-    <input type="radio" id="custom" name="pdbsource" value="Upload" onclick="javascript:checkPDB()">
-    <label for="custom">Upload your own PDB</label><br><br>
-
-    <p>If you choose <b>AlphaFold2 Protein Structure Database</b> for protein structure source, enter the corresponding protein's <b>UniProt ID</b> in the following field, any uploaded file will be ignored. If you choose <b>Upload your own PDB</b>, put the protein structure in the <b>PDB</b> format in the <b>PDB Structure</b> field, <b>UniProt ID</b> field will be just used as a reference to your prediction result. </p>
-
-    <label for="uid">Uniprot/Submission ID:</label>
-    <input type="text" id="uid" name="uid" class="form-control"><br><br>
-
-    <div id="pdb_container" style="display: none;">
-        <label for="pdb">PDB Structure:</label><br>
-        <textarea id="pdb" name="pdb" class="form-control" rows="15" cols="50"></textarea><br><br>
-    </div>
-
-    <!-- <label for="stru">PDB Structure</label>
-    <input type="text" id="stru" name="stru" class="form-control"> -->
-    <label for="email">Email:</label>
-    <input type="email" id="email" name="email" class="form-control" size="20"><br><br>
-    <button type="submit" class="btn btn-primary">Predict</button><br>
-    
-</form>
-<!-- <br> -->
-<p>You are welcomed to leave any feedback about this tool and website by clicking <a href="mailto:yangy9@ccf.org?Subject=CLEAN-Contact Feedback">here</a>. </p>
-<!-- <br> -->
-<p>If you find this tool useful in your research, please cite:</p>
-<a href="https://www.biorxiv.org/content/10.1101/2024.05.14.594148.abstract">Yang, Y., Jerger, A., Feng, S., Wang, Z., Cheung, M. S., Zucker, J., & Guan, Q. (2024). CLEAN-Contact: Contrastive Learning-enabled Enzyme Functional Annotation Prediction with Structural Inference. bioRxiv, 2024-05. (Under revision at Communications Biology)</a>
-
-<script type="text/javascript">
-    function checkPDB() {
-        if (document.getElementById('custom').checked) {
-            document.getElementById('pdb_container').style.display = 'block';
-        } else {
-            document.getElementById('pdb_container').style.display = 'none';
-
-        }
-    }
-</script>
-
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/png" href="./favicon.png">
+    <link rel='shortcut icon' type='image/png' href='./favicon.png' />
+    <title>CLEAN-Contact: Enzyme Commission Number Prediction</title>
+    <link id="fontcss" href="./assets/css/style.min.css" rel="stylesheet">
+    <script type="text/javascript" src="./assets/js/script.js"></script>
+  </head>
+  <body>
+    <main>
+      <section class="section-header">
+        <div class="container">
+          <div class="grid">
+            <div class="hero hero-wrapper column column--2-12-M column--3-11-L">
+              <div class="logo">
+                <img src="./assets/media/genetic-logo-symbol-rotated.svg" width="200">
+              </div>
+              <h1>CLEAN-Contact: Enzyme Commission Number Prediction</h1>
+              <p class="description">
+                Contrastive Learning framework for Enzyme functional ANnotation prediction combined with protein amino acid sequences and Contact maps (CLEAN-Contact) for enzyme prediction accuracy.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="genetic-blue section-predict section-text">
+        <div class="container">
+          <div class="grid">
+            <div class="column column--1-7-XS column--2-12-M column--1-13-L">
+              <div class="tabs-container">
+                <!-- Tabs on the right -->
+                <div class="tabs">
+                  <div class="tab-link tab-link-wrapper active" onclick="openTab(event, 'tab1')">
+                    <div class="tab-link-button">
+                      <div class="tab-link-title">
+                        <h2>AlphaFold2 Protein Structure Database</h2>
+                      </div>
+                      <div class="tab-link-description">
+                        <p>Input Uniprot ID to corresponding amino acid sequence to be processed.  The result will be emailed to you once the calculation is done.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-link tab-link-wrapper" onclick="openTab(event, 'tab2')">
+                    <div class="tab-link-button">
+                      <div class="tab-link-title">
+                        <h2>Use your own PDB</h2>
+                      </div>
+                      <div class="tab-link-description">
+                        <p>Paste in a PDB structure to be processed. The Submission ID will be used as a referece to your prediction result.  The result will be emailed to you once the calculation is done.</p>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="tab-link tab-link-wrapper" onclick="openTab(event, 'tab3')">
+                    <div class="tab-link-button">
+                      <div class="tab-link-title">
+                        <h2>Use an example protein structure</h2>
+                      </div>
+                      <div class="tab-link-description">
+                        <p>Submit this example amino acid sequence to get an idea of what results are returned when submitted.</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <!-- Tab Content -->
+                <div class="tab-content-container">
+                  <div class="tab-content show-tab-content" id="tab1">
+                    <!--<h2>Tab 1 Content</h2>-->
+                    <div class="form-wrapper">
+                      <form action="" method="post" id="validateuniprotid">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="kJbJIwFecYyJqtPyRCJyBOscu4iThT8GcHP5ptnTEoLkcN988nMMBceTnFXuSvVa">
+                        <div class="form-group">
+                          <label for="uid">Uniprot ID:</label>
+                          <input type="text" id="uid" name="uid" class="form-control"><br><br>
+                        </div>
+                        <div class="form_group">
+                          <div id="pdb_container" style="display: none;">
+                            <label for="pdb">PDB Structure:</label><br>
+                            <textarea id="pdb" name="pdb" class="form-control" rows="15" cols="50"></textarea><br><br>
+                          </div>
+                        </div>
+                        <div class="form-gropup">
+                          <label for="email">Email:</label>
+                          <input type="email" placeholder="whoami@example.com"  id="email" name="email" class="form-control" required>
+                        </div>
+                        <input type="submit" class="submit btn btn5" value="Predict" />
+                        <div id="error" class="error" style=""><p></p></div>
+                      </form>
+                    </div>
+                  </div>
+                  <div class="tab-content" id="tab2">
+                    <!--<h2>Tab 2 Content</h2>-->
+                    <div class="form-wrapper">
+                      <form action="" method="post">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="kJbJIwFecYyJqtPyRCJyBOscu4iThT8GcHP5ptnTEoLkcN988nMMBceTnFXuSvVa">
+                        <div class="form-group">
+                          <label for="uid2">Submission ID:</label>
+                          <input type="text" id="uid2" name="uid" class="form-control"><br><br>
+                        </div>
+                        <div class="form_group">
+                          <div id="pdb_container">
+                            <label for="pdb2">PDB Structure:</label><br>
+                            <textarea id="pdb2" name="pdb" class="form-control" rows="15" cols="50"></textarea><br><br>
+                          </div>
+                        </div>
+                        <div class="form-gropup">
+                          <label for="email2">Email:</label>
+                          <input type="email" placeholder="whoami@example.com"  id="email2" name="email" class="form-control" required>
+                        </div>
+                        <input type="submit" class="submit" value="Predict" />
+                      </form>
+                    </div>
+                  </div>
+                  <div class="tab-content" id="tab3">
+                    <div class="form-wrapper">
+                      <form action="" method="post">
+                        <input type="hidden" name="csrfmiddlewaretoken" value="kJbJIwFecYyJqtPyRCJyBOscu4iThT8GcHP5ptnTEoLkcN988nMMBceTnFXuSvVa">
+                        <div class="form-group">
+                          <label for="uid3">UniProt ID:</label>
+                          <input type="text" id="uid3" name="uid" class="form-control" value="Q95482" readonly><br><br>
+                        </div>
+                        <div class="form_group">
+                          <div id="pdb_container">
+                            <label for="pdb3">Amino Acid Sequence:</label><br>
+                            <textarea id="pdb3" name="pdb" class="form-control" rows="10" cols="50" readonly>MRFLMSRTVLLLLLGALAAPQTWAASHSLRYFYTAISRPGLGEPRFISVGYVDDTQFVRFDSDAPNPREEPRAPWMEQEGPEYWDRNTRIYLDTAQIFRVDLNTMLRYYNQSESGSHNIQRMYGCDVEPDGRLLRGYSQDSYDGKDYIALNEDLRSWTAADTAAQITRRKWEEAGVAERWRNYLEGLCVESLAKYLDMGKETLLRAESPNTRVTRHPISDREVTLRCWALGFYPAEITLTWQRDGQDHTQDTELVETRPAGDGTFQKWAAVVVPSGEEQRYTCHVQHKGLPEPINLRWEPSSLPFITILGIIAGVAVLVVTVVVGAVIWRKKCSGGKGPIYSHAARDDSTQGSDSSLMAPKV</textarea><br><br>
+                          </div>
+                        </div>
+                        <div class="form-gropup">
+                          <label for="email3">Email:</label>
+                          <input type="email" placeholder="whoami@example.com"  id="email3" name="email" class="form-control" required>
+                        </div>
+                        <input type="submit" class="submit" value="Predict" />
+                      </form>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="section-attribution section-cite section-text">
+        <div class="container">
+          <div class="text-container">
+            <p>
+              If you find this tool useful in your research, please cite:
+            </p>
+            <p>
+              Yang, Y., Jerger, A., Feng, S., Wang, Z., Cheung, M. S., Zucker, J., &amp; Guan, Q. (2024). CLEAN-Contact: Contrastive Learning-enabled Enzyme Functional Annotation Prediction with Structural Inference. bioRxiv, 2024-05. (Under revision at Communications Biology)
+            </p>
+            <div class="study-link">
+              <a href="https://www.biorxiv.org/content/10.1101/2024.05.14.594148v1.abstract" class="button" target="_blank">Read the study</a>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section class="genetic-blue section-footer section-text">
+        <div class="container">
+          <div class="footer">
+            <div class="logo-feedback">
+              <img src="./assets/media/clean-contact-logo-stacked.svg" class="cc-logo">
+            </div>
+            <div class="partners">
+              <a href="https://www.kent.edu/" target="_blank">
+                <img src="./assets/media/kent-state-400x400.png" class="kent-state-logo partner-logo">
+              </a>
+              <a href="https://www.pnnl.gov">
+                <img src="./assets/media/pnnl-400x400.png" class="pnnl-logo partner-logo">
+              </a>
+            </div>
+            <div class="feedback">
+              <p><a href="mailto:yangy9@ccf.org?Subject=CLEAN-Contact Feedback">Feedback about this tool and website is welcome.</a></p>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
