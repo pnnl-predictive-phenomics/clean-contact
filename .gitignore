@@ -1,0 +1,12 @@
+__pycache__/
+build/
+dist/
+*.egg-info/
+pip-wheel-metadata/
+data/distance_map/
+data/esm_data/
+data/model/
+data/esm2_data/
+data/resnet_data/
+data/contact_maps/
+results/
